@@ -26,70 +26,85 @@ function include_custom_js(){
 /*-----------------------------------------------------------------------------------*/
 /* Custom Return Data */
 /*-----------------------------------------------------------------------------------*/
-function student_data_prepare_post( $data, $post, $request ) {
+function ual_futures_prepare_post( $data, $post, $request ) {
 	$_data = $data->data;
 	$student = get_fields( $post );
 
-	if ($student == false) {
-		return;
-	}
+  $_data = array_merge($_data, $student);
 
-  $_data = $student;
+  unset($_data["acf"]);
+  unset($_data["link"]);
+  unset($_data["guid"]);
+  $_data["title"] = $_data["title"]["rendered"];
+  $_data["content"] = $_data["content"]["rendered"];
+  unset($_data["excerpt"]);
+  unset($_data["featured_media"]);
+  unset($_data["comment_status"]);
+  unset($_data["ping_status"]);
+  unset($_data["sticky"]);
+  unset($_data["meta"]);
+  
+  // unset($_data["categories"]);
 
-  if ($_data["hero_image_video"] == "Image"){
-    $_data["hero_image"] = $student["hero_image"]["url"];
-    if ($student["hero_image"]["sizes"]["medium"]){
-      $_data["hero_image_medium"] = $student["hero_image"]["sizes"]["medium_large"];
-    }else{
-      $_data["hero_image_medium"] = $student["hero_image"]["url"];
-    }
-  }
-  if ($_data["image_video_1"] == "Image"){
-    $_data["image_1"] = $student["image_1"]["url"];
-    if ($student["image_1"]["sizes"]["medium"]){
-      $_data["image_1_medium"] = $student["image_1"]["sizes"]["medium_large"];
-    }else{
-      $_data["image_1_medium"] = $student["image_1"]["url"];
-    }
-  }
-  if ($_data["image_video_2"] == "Image"){
-    $_data["image_2"] = $student["image_2"]["url"];
-    if ($student["image_2"]["sizes"]["medium"]){
-      $_data["image_2_medium"] = $student["image_2"]["sizes"]["medium_large"];
-    }else{
-      $_data["image_2_medium"] = $student["image_2"]["url"];
-    }
-  }
+  $_data["appData"] = "posts";
 
-  if ($_data["hero_image"] === false){
-    unset($_data["hero_image"]);
-  }
-  if ($_data["image_1"] === false){
-    unset($_data["image_1"]);
-  }
-  if ($_data["image_2"] === false){
-    unset($_data["image_2"]);
-  }
-
-	$_data['id'] = $student['student_number'];
-
-  // Parse other field into tags
-	$other_tags = explode(",", $_data['other:']);
-	foreach ($other_tags as &$value) {
-	    $value = trim($value);
-	}
-	$_data['tags'] = array_merge($_data['tags'], $other_tags);
-
-  for ($i; $i<count($_data['tags']); $i++){
-    if ($_data['tags'][$i] == ""){
-      unset($_data['tags'][$i]);
-    }
-  }
-
-	unset($_data['other:']);
 	return $_data;
 }
-add_filter( 'rest_prepare_student_info', 'student_data_prepare_post', 10, 3 );
+add_filter( 'rest_prepare_post', 'ual_futures_prepare_post', 10, 3 );
+
+
+function ual_futures_prepare_event( $data, $post, $request ) {
+  $_data = $data->data;
+  $student = get_fields( $post );
+
+  $_data = array_merge($_data, $student);
+
+  unset($_data["acf"]);
+  unset($_data["link"]);
+  unset($_data["guid"]);
+  $_data["title"] = $_data["title"]["rendered"];
+  $_data["content"] = $_data["content"]["rendered"];
+  unset($_data["excerpt"]);
+  unset($_data["featured_media"]);
+  unset($_data["comment_status"]);
+  unset($_data["ping_status"]);
+  unset($_data["sticky"]);
+  unset($_data["meta"]);
+  
+  // unset($_data["categories"]);
+
+  $_data["appData"] = "events";
+
+  return $_data;
+}
+add_filter( 'rest_prepare_event', 'ual_futures_prepare_event', 10, 3 );
+
+
+function ual_futures_prepare_opportunity( $data, $post, $request ) {
+  $_data = $data->data;
+  $student = get_fields( $post );
+
+  $_data = array_merge($_data, $student);
+
+  unset($_data["acf"]);
+  unset($_data["link"]);
+  unset($_data["guid"]);
+  $_data["title"] = $_data["title"]["rendered"];
+  $_data["content"] = $_data["content"]["rendered"];
+  unset($_data["excerpt"]);
+  unset($_data["featured_media"]);
+  unset($_data["comment_status"]);
+  unset($_data["ping_status"]);
+  unset($_data["sticky"]);
+  unset($_data["meta"]);
+  
+  // unset($_data["categories"]);
+
+  $_data["appData"] = "opportunities";
+
+  return $_data;
+}
+add_filter( 'rest_prepare_opportunity', 'ual_futures_prepare_opportunity', 10, 3 );
 
 
 
@@ -118,23 +133,35 @@ function create_post_type() {
       'show_in_rest' => true
     )
   );
+
+  register_post_type('opportunities',
+    array(
+      'labels' => array(
+        'name' => __('Opportunities'),
+        'singular_name' => __('Opportunity')
+      ),
+      'public' => true,
+      'has_archive' => true,
+      'show_in_rest' => true
+    )
+  );
 }
 
 
 /*-----------------------------------------------------------------------------------*/
 /* Remove Unwanted Admin Menu Items */
 /*-----------------------------------------------------------------------------------*/
-// function remove_admin_menu_items() {
-//   $remove_menu_items = array(__('Links'),__('Posts'),__('Comments'),__('Pages'));
-//   global $menu;
-//   end ($menu);
-//   while (prev($menu)){
-//     $item = explode(' ',$menu[key($menu)][0]);
-//     if(in_array($item[0] != NULL?$item[0]:"" , $remove_menu_items)){
-//     unset($menu[key($menu)]);}
-//   }
-// }
-// add_action('admin_menu', 'remove_admin_menu_items');
+function remove_admin_menu_items() {
+  $remove_menu_items = array(__('Links'),__('Comments'));
+  global $menu;
+  end ($menu);
+  while (prev($menu)){
+    $item = explode(' ',$menu[key($menu)][0]);
+    if(in_array($item[0] != NULL?$item[0]:"" , $remove_menu_items)){
+    unset($menu[key($menu)]);}
+  }
+}
+add_action('admin_menu', 'remove_admin_menu_items');
 
 
 
