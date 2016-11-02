@@ -27,64 +27,44 @@ function include_custom_js(){
 /* Custom Return Data */
 /*-----------------------------------------------------------------------------------*/
 function ual_futures_prepare_post( $data, $post, $request ) {
-	$_data = $data->data;
-	$student = get_fields( $post );
-
-  $_data = array_merge($_data, $student);
-
-  unset($_data["acf"]);
-  unset($_data["link"]);
-  unset($_data["guid"]);
-  $_data["title"] = $_data["title"]["rendered"];
-  $_data["content"] = $_data["content"]["rendered"];
-  unset($_data["excerpt"]);
-  unset($_data["featured_media"]);
-  unset($_data["comment_status"]);
-  unset($_data["ping_status"]);
-  unset($_data["sticky"]);
-  unset($_data["meta"]);
-  
-  // unset($_data["categories"]);
-
+  $_data = general_prepare_posts($data, $post->ID, $request);
   $_data["appData"] = "posts";
+
+  $_data["tags"] = [];
+  $temp_tags = wp_get_post_tags($post->ID, array('fields' => 'names'));
+
+  foreach($temp_tags as $tag){
+    array_push($_data["tags"], $tag);
+  }
 
 	return $_data;
 }
 add_filter( 'rest_prepare_post', 'ual_futures_prepare_post', 10, 3 );
 
 
-function ual_futures_prepare_event( $data, $post, $request ) {
-  $_data = $data->data;
-  $student = get_fields( $post );
-
-  $_data = array_merge($_data, $student);
-
-  unset($_data["acf"]);
-  unset($_data["link"]);
-  unset($_data["guid"]);
-  $_data["title"] = $_data["title"]["rendered"];
-  $_data["content"] = $_data["content"]["rendered"];
-  unset($_data["excerpt"]);
-  unset($_data["featured_media"]);
-  unset($_data["comment_status"]);
-  unset($_data["ping_status"]);
-  unset($_data["sticky"]);
-  unset($_data["meta"]);
-  
-  // unset($_data["categories"]);
-
+function ual_futures_prepare_events( $data, $post, $request ) {
+  $_data = general_prepare_posts($data, $post->ID, $request);
   $_data["appData"] = "events";
 
   return $_data;
 }
-add_filter( 'rest_prepare_event', 'ual_futures_prepare_event', 10, 3 );
+add_filter( 'rest_prepare_events', 'ual_futures_prepare_events', 10, 3 );
 
 
-function ual_futures_prepare_opportunity( $data, $post, $request ) {
+function ual_futures_prepare_opportunities( $data, $post, $request ) {
+  $_data = general_prepare_posts($data, $post->ID, $request);
+  $_data["appData"] = "opportunities";
+
+  return $_data;
+}
+add_filter( 'rest_prepare_opportunities', 'ual_futures_prepare_opportunities', 10, 3 );
+
+
+function general_prepare_posts($data, $postID, $request){
   $_data = $data->data;
-  $student = get_fields( $post );
+  $post = get_fields( $post );
 
-  $_data = array_merge($_data, $student);
+  $_data = array_merge($_data, $post);
 
   unset($_data["acf"]);
   unset($_data["link"]);
@@ -97,16 +77,16 @@ function ual_futures_prepare_opportunity( $data, $post, $request ) {
   unset($_data["ping_status"]);
   unset($_data["sticky"]);
   unset($_data["meta"]);
-  
-  // unset($_data["categories"]);
 
-  $_data["appData"] = "opportunities";
+  $_data["tags"] = [];
+  $temp_tags = wp_get_post_terms($postID, "tags", array("fields" => "names"));
+
+  foreach($temp_tags as $tag){
+    array_push($_data["tags"], $tag);
+  }
 
   return $_data;
 }
-add_filter( 'rest_prepare_opportunity', 'ual_futures_prepare_opportunity', 10, 3 );
-
-
 
 // Ask browser to cache the return data
 add_filter( 'rest_cache_headers', function() {
@@ -145,6 +125,40 @@ function create_post_type() {
       'show_in_rest' => true
     )
   );
+}
+
+/* Custom Post Type Tags */
+add_action( 'init', 'create_tag_taxonomies', 0 );
+
+//create two taxonomies, genres and tags for the post type "tag"
+function create_tag_taxonomies(){
+  $labels = array(
+      'name'              => _x( 'Tags', 'taxonomy general name' ),
+      'singular_name'     => _x( 'Tag', 'taxonomy singular name' ),
+      'search_items'      => __( 'Search Tags' ),
+      'all_items'         => __( 'All Tags' ),
+      'parent_item'       => null,
+      'parent_item_colon' => null,
+      'edit_item'         => __( 'Edit Tag' ),
+      'update_item'       => __( 'Update Tag' ),
+      'add_new_item'      => __( 'Add New Tag' ),
+      'new_item_name'     => __( 'New Tag Name' ),
+      'menu_name'         => __( 'Tags' ),
+    );
+
+    $args = array(
+      'hierarchical'      => false,
+      'labels'            => $labels,
+      'show_ui'           => true,
+      'show_admin_column' => true,
+      'query_var'         => true,
+      'rewrite'           => array( 'slug' => 'tag' ),
+      'show_in_rest'       => true,
+      'rest_base'          => 'tags',
+      'rest_controller_class' => 'WP_REST_Terms_Controller',
+    );
+
+    register_taxonomy( 'tags', array( 'events', 'opportunities' ), $args );
 }
 
 
