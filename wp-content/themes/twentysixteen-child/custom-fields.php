@@ -72,6 +72,19 @@ if(function_exists("register_field_group"))
 				'formatting' => 'html',
 				'maxlength' => '',
 			),
+			array (
+				'key' => 'field_582861077277f',
+				'label' => 'Event Date',
+				'name' => 'event_date',
+				'type' => 'date_time_picker',
+				'required' => 1,
+				'field_type' => 'date_time',
+				'date_format' => 'yy-mm-dd',
+				'time_format' => 'HH:mm',
+				'past_dates' => 'yes',
+				'first_day' => 1,
+				'time_selector' => 'select'
+			)
 		),
 		'location' => array (
 			array (
