@@ -1,5 +1,5 @@
 <?php
-// include_once("custom-fields.php");
+include_once("custom-fields.php");
 
 // We don't need that. Please write up to date jQuery.
 add_action('wp_default_scripts', function($scripts) {
@@ -60,6 +60,15 @@ function ual_futures_prepare_opportunities( $data, $post, $request ) {
 add_filter( 'rest_prepare_opportunities', 'ual_futures_prepare_opportunities', 10, 3 );
 
 
+function ual_futures_prepare_directories( $data, $post, $request ) {
+  $_data = general_prepare_posts($data, $post->ID, $request);
+  $_data["appData"] = "directories";
+
+  return $_data;
+}
+add_filter( 'rest_prepare_directories', 'ual_futures_prepare_directories', 10, 3 );
+
+
 function general_prepare_posts($data, $postID, $request){
   $_data = $data->data;
   $post = get_fields( $post );
@@ -84,6 +93,12 @@ function general_prepare_posts($data, $postID, $request){
   foreach($temp_tags as $tag){
     array_push($_data["tags"], $tag);
   }
+
+  $temp_cat = wp_get_post_categories($postID, array('fields' => 'names'));
+  $_data["category"] = $temp_cat[0];
+
+  unset($_data["categories"]);
+  unset($_data[""]);
 
   return $_data;
 }
@@ -110,7 +125,8 @@ function create_post_type() {
       ),
       'public' => true,
       'has_archive' => true,
-      'show_in_rest' => true
+      'show_in_rest' => true,
+      'taxonomies' => array('category')
     )
   );
 
@@ -122,7 +138,21 @@ function create_post_type() {
       ),
       'public' => true,
       'has_archive' => true,
-      'show_in_rest' => true
+      'show_in_rest' => true,
+      'taxonomies' => array('category')
+    )
+  );
+
+  register_post_type('directories',
+    array(
+      'labels' => array(
+        'name' => __('Directories'),
+        'singular_name' => __('Directory')
+      ),
+      'public' => true,
+      'has_archive' => true,
+      'show_in_rest' => true,
+      'taxonomies' => array('category')
     )
   );
 }
@@ -130,9 +160,8 @@ function create_post_type() {
 /* Custom Post Type Tags */
 add_action( 'init', 'create_tag_taxonomies', 0 );
 
-//create two taxonomies, genres and tags for the post type "tag"
 function create_tag_taxonomies(){
-  $labels = array(
+  $tag_labels = array(
       'name'              => _x( 'Tags', 'taxonomy general name' ),
       'singular_name'     => _x( 'Tag', 'taxonomy singular name' ),
       'search_items'      => __( 'Search Tags' ),
@@ -146,9 +175,9 @@ function create_tag_taxonomies(){
       'menu_name'         => __( 'Tags' ),
     );
 
-    $args = array(
+    $tag_args = array(
       'hierarchical'      => false,
-      'labels'            => $labels,
+      'labels'            => $tag_labels,
       'show_ui'           => true,
       'show_admin_column' => true,
       'query_var'         => true,
@@ -158,7 +187,7 @@ function create_tag_taxonomies(){
       'rest_controller_class' => 'WP_REST_Terms_Controller',
     );
 
-    register_taxonomy( 'tags', array( 'events', 'opportunities' ), $args );
+    register_taxonomy( 'tags', array( 'events', 'opportunities', 'directories' ), $tag_args );
 }
 
 
