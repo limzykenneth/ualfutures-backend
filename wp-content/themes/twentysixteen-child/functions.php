@@ -28,7 +28,7 @@ function include_custom_js(){
 /*-----------------------------------------------------------------------------------*/
 function ual_futures_prepare_post( $data, $post, $request ) {
   $_data = general_prepare_posts($data, $post->ID, $request);
-  $_data["appData"] = "posts";
+  $_data["appData"] = "features";
 
   $_data["tags"] = [];
   $temp_tags = wp_get_post_tags($post->ID, array('fields' => 'names'));
