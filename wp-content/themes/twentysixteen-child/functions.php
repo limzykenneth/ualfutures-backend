@@ -86,6 +86,7 @@ function general_prepare_posts($data, $postID, $request){
   unset($_data["ping_status"]);
   unset($_data["sticky"]);
   unset($_data["meta"]);
+  $_data["date_gmt"] = $_data["date_gmt"] . "Z";
 
   $_data["tags"] = [];
   $temp_tags = wp_get_post_terms($postID, "tags", array("fields" => "names"));
