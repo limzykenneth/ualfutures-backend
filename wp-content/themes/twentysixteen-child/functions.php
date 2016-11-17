@@ -121,11 +121,11 @@ function ual_futures_prepare_slideshow( $data, $post, $request ) {
     }
   }
 
-  $post["length"] = count($post) / 2;
+  $post["size"] = count($post) / 2;
 
   // $_data = array_merge($_data, $post);
-
-  return $post;
+  $_data["slideshow"] = $post;
+  return $_data;
 }
 
 add_filter( 'rest_prepare_slideshow', 'ual_futures_prepare_slideshow', 10, 3 );
