@@ -23,10 +23,10 @@ function include_custom_js(){
 }
 
 // Set CORS headers
-function add_cors_http_header(){
-    header("Access-Control-Allow-Origin: *");
-}
-add_action('rest_api_init','add_cors_http_header');
+// function add_cors_http_header(){
+//     header("Access-Control-Allow-Origin: *");
+// }
+// add_action('rest_api_init','add_cors_http_header');
 
 
 /*-----------------------------------------------------------------------------------*/
@@ -110,6 +110,26 @@ function general_prepare_posts($data, $postID, $request){
   return $_data;
 }
 
+
+function ual_futures_prepare_slideshow( $data, $post, $request ) {
+  // $_data = $data->data;
+  $post = get_fields( $post );
+
+  foreach ($post as $i => $value) {
+    if($value == false){
+      unset($post[$i]);
+    }
+  }
+
+  $post["length"] = count($post) / 2;
+
+  // $_data = array_merge($_data, $post);
+
+  return $post;
+}
+
+add_filter( 'rest_prepare_slideshow', 'ual_futures_prepare_slideshow', 10, 3 );
+
 // Ask browser to cache the return data
 add_filter( 'rest_cache_headers', function() {
     return array( 'Cache-Control' => 'private,max-age=172800' );
@@ -160,6 +180,18 @@ function create_post_type() {
       'has_archive' => true,
       'show_in_rest' => true,
       'taxonomies' => array('category')
+    )
+  );
+
+  register_post_type('slideshow',
+    array(
+      'labels' => array(
+        'name' => __('Slideshow'),
+        'singular_name' => __('Slideshow')
+      ),
+      'public' => true,
+      'has_archive' => true,
+      'show_in_rest' => true
     )
   );
 }

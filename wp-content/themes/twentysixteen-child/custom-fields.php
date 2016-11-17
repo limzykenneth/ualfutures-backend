@@ -243,4 +243,137 @@ if(function_exists("register_field_group"))
 		),
 		'menu_order' => 0,
 	));
+
+	// Slideshow content
+	register_field_group(array (
+		'id' => 'acf_slideshow',
+		'title' => 'Slideshow',
+		'fields' => createSlidesFields(10),
+		'location' => array (
+			array (
+				array (
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'slideshow',
+					'order_no' => 0,
+					'group_no' => 0,
+				)
+			),
+		),
+		'options' => array (
+			'position' => 'acf_after_title',
+			'layout' => 'no_box',
+			'hide_on_screen' => array (
+				0 => 'permalink',
+				1 => 'the_content',
+				2 => 'excerpt',
+				3 => 'custom_fields',
+				4 => 'discussion',
+				5 => 'comments',
+				6 => 'revisions',
+				7 => 'slug',
+				8 => 'author',
+				9 => 'format',
+				10 => 'featured_image',
+				11 => 'categories',
+				12 => 'tags',
+				13 => 'send-trackbacks',
+			),
+		),
+		'menu_order' => 0,
+	));
+}
+
+function createSlidesFields($number_of_slides){
+	$result = array();
+
+	$fields_id = 1;
+	for ($i = 1; $i <= $number_of_slides; $i++) {
+		$first_field = 	array (
+						'key' => 'field_' . $fields_id,
+						'label' => 'Slide ' . $i,
+						'name' => 'slide_' . $i,
+						'type' => 'select',
+						'conditional_logic' => array (
+							'status' => 1,
+							'rules' => array (
+								array (
+									'field' => 'field_' . ($fields_id - 3),
+									'operator' => '==',
+									'value' => 'Text',
+								),
+								array (
+									'field' => 'field_' . ($fields_id - 3),
+									'operator' => '==',
+									'value' => 'Image',
+								),
+							),
+							'allorany' => 'any',
+						),
+						'choices' => array (
+							'Text' => 'Text',
+							'Image' => 'Image',
+						),
+						'default_value' => '',
+						'allow_null' => 1,
+						'multiple' => 0,
+					);
+		if($i == 1){
+			unset($first_field['conditional_logic']);
+		}
+		$fields_id++;
+
+		$second_field = array (
+							'key' => 'field_' . $fields_id,
+							'label' => 'Text ' . $i,
+							'name' => 'text_' . $i,
+							'type' => 'text',
+							'required' => 1,
+							'conditional_logic' => array (
+								'status' => 1,
+								'rules' => array (
+									array (
+										'field' => 'field_' . ($fields_id - 1),
+										'operator' => '==',
+										'value' => 'Text',
+									),
+								),
+								'allorany' => 'all',
+							),
+							'default_value' => '',
+							'placeholder' => '',
+							'prepend' => '',
+							'append' => '',
+							'formatting' => 'html',
+							'maxlength' => '',
+						);
+		$fields_id++;
+
+		$third_field =  array (
+							'key' => 'field_' . $fields_id,
+							'label' => 'Image ' . $i,
+							'name' => 'image_' . $i,
+							'type' => 'image',
+							'required' => 1,
+							'conditional_logic' => array (
+								'status' => 1,
+								'rules' => array (
+									array (
+										'field' => 'field_' . ($fields_id - 2),
+										'operator' => '==',
+										'value' => 'Image',
+									),
+								),
+								'allorany' => 'all',
+							),
+							'save_format' => 'url',
+							'preview_size' => 'medium',
+							'library' => 'all',
+						);
+		$fields_id++;
+
+		array_push($result, $first_field, $second_field, $third_field);
+	}
+
+	return $result;
 }
