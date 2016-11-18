@@ -39,4 +39,4 @@ Please note the backend is not meant to be a public facing site and visitors sho
 
 ## License
 
-For Wordpress's license see `license.txt`. Other custom code under the `twentysixteen-child` folder are under [BSD 3-Clause](https://opensource.org/licenses/BSD-3-Clause) license.
+For Wordpress's license see [license](https://codex.wordpress.org/License). Other custom code under the `twentysixteen-child` folder are under [BSD 3-Clause](https://opensource.org/licenses/BSD-3-Clause) license.
