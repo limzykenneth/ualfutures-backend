@@ -136,6 +136,17 @@ if(function_exists("register_field_group"))
 				'formatting' => 'html',
 				'maxlength' => '',
 			),
+			array (
+				'key' => 'field_5834472253822',
+				'label' => 'Opportunity info',
+				'name' => 'opps_info',
+				'type' => 'wysiwyg',
+				'instructions' => 'Enter relevant facts about the opportunity. Please keep lines short and text only.',
+				'required' => 1,
+				'default_value' => '',
+				'toolbar' => 'basic',
+				'media_upload' => 'no',
+			),
 		),
 		'location' => array (
 			array (
