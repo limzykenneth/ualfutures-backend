@@ -1,0 +1,18 @@
+{
+  "name": "ualfutures-eventbrite",
+  "version": "0.0.1",
+  "description": "node.js helpers to make parsing data from eventbrite easier",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "limzykenneth",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "cross-spawn": "^5.0.1",
+    "dotenv": "^2.0.0",
+    "minimist": "^1.2.0",
+    "request": "^2.79.0",
+    "underscore": "^1.8.3"
+  }
+}

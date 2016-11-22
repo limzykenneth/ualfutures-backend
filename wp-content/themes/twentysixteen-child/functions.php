@@ -50,6 +50,17 @@ add_filter( 'rest_prepare_post', 'ual_futures_prepare_post', 10, 3 );
 
 function ual_futures_prepare_events( $data, $post, $request ) {
   $_data = general_prepare_posts($data, $post->ID, $request);
+
+  $output = [];
+  $command = "cd nodejs && /Users/kennethlim/.nvm/versions/node/v6.5.0/bin/node index.js --url={$_data["eventbrite_url"]}";
+
+  exec($command, $output);
+
+  $str = implode($output);
+  $json = json_decode($str, true);
+
+  $_data["ebData"] = $json;
+
   $_data["appData"] = "events";
 
   return $_data;
