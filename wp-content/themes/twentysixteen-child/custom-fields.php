@@ -173,6 +173,18 @@ if(function_exists("register_field_group"))
 				'maxlength' => '',
 			),
 			array (
+				'key' => 'field_5814a64ac9830',
+				'label' => 'Authors',
+				'name' => 'created_by',
+				'type' => 'text',
+				'default_value' => '',
+				'placeholder' => 'Written by ...',
+				'prepend' => '',
+				'append' => '',
+				'formatting' => 'html',
+				'maxlength' => '',
+			),
+			array (
 				'key' => 'field_5814a5e1c9831',
 				'label' => 'Post feature level',
 				'name' => 'level',
