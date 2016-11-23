@@ -52,6 +52,7 @@ function ual_futures_prepare_events( $data, $post, $request ) {
   $_data = general_prepare_posts($data, $post->ID, $request);
 
   $output = [];
+  // $command = "cd nodejs && /srv/.nvm/versions/node/v6.9.1/bin/node index.js --url={$_data["eventbrite_url"]}";
   $command = "cd nodejs && /Users/kennethlim/.nvm/versions/node/v6.5.0/bin/node index.js --url={$_data["eventbrite_url"]}";
 
   exec($command, $output);
