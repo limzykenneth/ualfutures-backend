@@ -51,18 +51,35 @@ add_filter( 'rest_prepare_post', 'ual_futures_prepare_post', 10, 3 );
 function ual_futures_prepare_events( $data, $post, $request ) {
   $_data = general_prepare_posts($data, $post->ID, $request);
 
-  $output = [];
-  // $command = "cd nodejs && /srv/.nvm/versions/node/v6.9.1/bin/node index.js --url={$_data["eventbrite_url"]}";
-  $command = "cd nodejs && /Users/kennethlim/.nvm/versions/node/v6.5.0/bin/node index.js --url={$_data["eventbrite_url"]}";
+  $ch = curl_init("http://localhost:8081/eb");
 
-  exec($command, $output);
+  $options = array(
+    CURLOPT_RETURNTRANSFER => true,   // return web page
+    CURLOPT_HEADER         => false,  // don't return headers
+    CURLOPT_FOLLOWLOCATION => true,   // follow redirects
+    CURLOPT_MAXREDIRS      => 10,     // stop after 10 redirects
+    CURLOPT_ENCODING       => "",     // handle compressed
+    CURLOPT_USERAGENT      => "test", // name of client
+    CURLOPT_AUTOREFERER    => true,   // set referrer on redirect
+    CURLOPT_CONNECTTIMEOUT => 120,    // time-out on connect
+    CURLOPT_TIMEOUT        => 120,    // time-out on response
+  );
 
-  $str = implode($output);
-  $json = json_decode($str, true);
+  curl_setopt_array($ch, $options);
 
-  $_data["ebData"] = $json;
+  $request_header = "url:" . $_data['eventbrite_url'];
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    $request_header,
+  ));
+
+  $content  = curl_exec($ch);
+  curl_close($ch);
+
+  $_data["ebData"] = json_decode($content);
 
   $_data["appData"] = "events";
+
+  // $_data["debug"] = $request_header;
 
   return $_data;
 }
