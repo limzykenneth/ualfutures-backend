@@ -19,7 +19,7 @@ if(function_exists("register_field_group"))
 				'placeholder' => '',
 				'maxlength' => '',
 				'rows' => '',
-				'formatting' => 'none',
+				'formatting' => 'html',
 			),
 		),
 		'location' => array (
@@ -56,7 +56,7 @@ if(function_exists("register_field_group"))
 				'placeholder' => '',
 				'maxlength' => '',
 				'rows' => '',
-				'formatting' => 'none',
+				'formatting' => 'html',
 			),
 			array (
 				'read_only' => false,
@@ -64,7 +64,7 @@ if(function_exists("register_field_group"))
 				'mask_autoclear' => 1,
 				'mask_placeholder' => '_',
 				'function' => 'regex',
-				'pattern' => 'tickets-(\\d*?)(?:\\?|$)',
+				'pattern' => '(tickets-(\\d*?)(?:\\?|$)|^(?![\s\S]))',
 				'message' => 'Please input a valid eventbrite URL. Example: https://www.eventbrite.co.uk/e/an-evening-of-unnecessary-detail-tickets-26662766051',
 				'unique' => 'non-unique',
 				'unique_statuses' => array (
@@ -153,7 +153,7 @@ if(function_exists("register_field_group"))
 				'placeholder' => '',
 				'maxlength' => '',
 				'rows' => '',
-				'formatting' => 'none',
+				'formatting' => 'html',
 			),
 			array (
 				'key' => 'field_581550ad8bf27',
