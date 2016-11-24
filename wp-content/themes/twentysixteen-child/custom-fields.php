@@ -14,8 +14,7 @@ if(function_exists("register_field_group"))
 				'label' => 'External Link',
 				'name' => 'external_links',
 				'type' => 'text',
-				// 'instructions' => 'Enter external link or HTML embed code.',
-				'required' => 1,
+				'instructions' => 'Enter external link or HTML embed code.',
 				'default_value' => '',
 				'placeholder' => '',
 				'maxlength' => '',
@@ -38,6 +37,7 @@ if(function_exists("register_field_group"))
 			'position' => 'normal',
 			'layout' => 'no_box',
 			'hide_on_screen' => array (
+				0 => 'the_content',
 			),
 		),
 		'menu_order' => 0,
@@ -46,6 +46,18 @@ if(function_exists("register_field_group"))
 		'id' => 'acf_events',
 		'title' => 'Events',
 		'fields' => array (
+			array (
+				'key' => 'field_58286149b37e9',
+				'label' => 'External Link',
+				'name' => 'external_links',
+				'type' => 'text',
+				'instructions' => 'Enter external link or HTML embed code.',
+				'default_value' => '',
+				'placeholder' => '',
+				'maxlength' => '',
+				'rows' => '',
+				'formatting' => 'none',
+			),
 			array (
 				'read_only' => false,
 				'mask' => '',
@@ -64,7 +76,6 @@ if(function_exists("register_field_group"))
 				'label' => 'Eventbrite URL',
 				'name' => 'eventbrite_url',
 				'type' => 'validated_field',
-				'required' => 1,
 				'sub_field' => array (
 					'type' => 'text',
 					'key' => 'field_5835778bcad06',
@@ -133,6 +144,18 @@ if(function_exists("register_field_group"))
 		'title' => 'Opportunities',
 		'fields' => array (
 			array (
+				'key' => 'field_58286149b37e0',
+				'label' => 'External Link',
+				'name' => 'external_links',
+				'type' => 'text',
+				'instructions' => 'Enter external link or HTML embed code.',
+				'default_value' => '',
+				'placeholder' => '',
+				'maxlength' => '',
+				'rows' => '',
+				'formatting' => 'none',
+			),
+			array (
 				'key' => 'field_581550ad8bf27',
 				'label' => 'Job/Opportunity type',
 				'name' => 'opps_type',
@@ -165,7 +188,6 @@ if(function_exists("register_field_group"))
 				'name' => 'opps_info',
 				'type' => 'wysiwyg',
 				'instructions' => 'Enter relevant facts about the opportunity. Please keep lines short and enter text only. You can format the text as well as use lists.',
-				'required' => 1,
 				'default_value' => '',
 				'toolbar' => 'basic',
 				'media_upload' => 'no',
