@@ -9,6 +9,12 @@ const ebIDRegex = /tickets-(\d*?)(?:\?|$)/;
 
 app.get('/eb', function (req, res) {
 	let url = req.get("url");
+
+	if(typeof url == "undefined"){
+		res.send("");
+		return;
+	}
+
 	const ebID = ebIDRegex.exec(url)[1];
 
 	let venueURL = ``;
