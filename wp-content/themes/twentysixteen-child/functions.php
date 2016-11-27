@@ -22,6 +22,15 @@ function include_custom_js(){
     wp_enqueue_script("multi_select");
 }
 
+add_action('admin_head', 'custom_admin_styles');
+function custom_admin_styles() {
+  echo '<style>
+    .wp-pointer{
+      display: none !important;
+    }
+  </style>';
+}
+
 // Set CORS headers
 // function add_cors_http_header(){
 //     header("Access-Control-Allow-Origin: *");
