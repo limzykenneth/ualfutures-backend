@@ -52,6 +52,8 @@ function ual_futures_prepare_post( $data, $post, $request ) {
     array_push($_data["tags"], $tag);
   }
 
+  $_data["category"] = "Features";
+
 	return $_data;
 }
 add_filter( 'rest_prepare_post', 'ual_futures_prepare_post', 10, 3 );
@@ -139,8 +141,8 @@ function general_prepare_posts($data, $postID, $request){
     array_push($_data["tags"], $tag);
   }
 
-  $temp_cat = wp_get_post_categories($postID, array('fields' => 'names'));
-  $_data["category"] = $temp_cat[0];
+  // $temp_cat = wp_get_post_categories($postID, array('fields' => 'names'));
+  // $_data["category"] = $temp_cat[0];
 
   unset($_data["categories"]);
   unset($_data[""]);
