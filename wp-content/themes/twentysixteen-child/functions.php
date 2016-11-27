@@ -191,7 +191,6 @@ function create_post_type() {
       'public' => true,
       'has_archive' => true,
       'show_in_rest' => true,
-      'taxonomies' => array('category')
     )
   );
 
@@ -204,7 +203,6 @@ function create_post_type() {
       'public' => true,
       'has_archive' => true,
       'show_in_rest' => true,
-      'taxonomies' => array('category')
     )
   );
 
@@ -217,7 +215,6 @@ function create_post_type() {
       'public' => true,
       'has_archive' => true,
       'show_in_rest' => true,
-      'taxonomies' => array('category')
     )
   );
 
