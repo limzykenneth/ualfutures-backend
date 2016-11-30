@@ -88,6 +88,12 @@ function ual_futures_prepare_events( $data, $post, $request ) {
 
   $_data["ebData"] = json_decode($content);
 
+  if($_data["category"] == "Futures Event"){
+    $_data["level"] = "1";
+  }else{
+    $_data["level"] = "0";
+  }
+
   $_data["appData"] = "events";
 
   // $_data["debug"] = $request_header;
@@ -99,6 +105,7 @@ add_filter( 'rest_prepare_events', 'ual_futures_prepare_events', 10, 3 );
 
 function ual_futures_prepare_opportunities( $data, $post, $request ) {
   $_data = general_prepare_posts($data, $post->ID, $request);
+  $_data["level"] = "0";
   $_data["appData"] = "opportunities";
 
   return $_data;
@@ -108,6 +115,7 @@ add_filter( 'rest_prepare_opportunities', 'ual_futures_prepare_opportunities', 1
 
 function ual_futures_prepare_directories( $data, $post, $request ) {
   $_data = general_prepare_posts($data, $post->ID, $request);
+  $_data["level"] = "0";
   $_data["appData"] = "directories";
 
   return $_data;

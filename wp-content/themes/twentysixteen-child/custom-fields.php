@@ -213,6 +213,46 @@ if(function_exists("register_field_group"))
 		'menu_order' => 0,
 	));
 	register_field_group(array (
+		'id' => 'acf_level',
+		'title' => 'Features',
+		'fields' => array (
+			array (
+				'key' => 'field_5814a5e1c9831',
+				'label' => 'Post feature level',
+				'name' => 'level',
+				'type' => 'select',
+				'required' => 1,
+				'instructions' => 'The higher the number, the bigger it is on the menu.',
+				'choices' => array (
+					0 => 0,
+					1 => 1,
+					2 => 2,
+				),
+				'default_value' => 0,
+				'allow_null' => 0,
+				'multiple' => 0,
+			),
+		),
+		'location' => array (
+			array (
+				array (
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'post',
+					'order_no' => 0,
+					'group_no' => 0,
+				),
+			),
+		),
+		'options' => array (
+			'position' => 'acf_after_title',
+			'layout' => 'no_box',
+			'hide_on_screen' => array (
+			),
+		),
+		'menu_order' => 0,
+	));
+	register_field_group(array (
 		'id' => 'acf_required-fields-for-all',
 		'title' => 'Required fields for all',
 		'fields' => array (
@@ -239,22 +279,6 @@ if(function_exists("register_field_group"))
 				'append' => '',
 				'formatting' => 'html',
 				'maxlength' => '',
-			),
-			array (
-				'key' => 'field_5814a5e1c9831',
-				'label' => 'Post feature level',
-				'name' => 'level',
-				'type' => 'select',
-				'required' => 1,
-				'instructions' => 'The higher the number, the bigger it is on the menu.',
-				'choices' => array (
-					0 => 0,
-					1 => 1,
-					2 => 2,
-				),
-				'default_value' => 0,
-				'allow_null' => 0,
-				'multiple' => 0,
 			),
 			array (
 				'key' => 'field_58154fc657456',
@@ -312,6 +336,7 @@ if(function_exists("register_field_group"))
 		),
 		'menu_order' => 0,
 	));
+
 
 	// Slideshow content
 	register_field_group(array (
