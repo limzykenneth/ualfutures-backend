@@ -124,7 +124,7 @@ function ual_futures_prepare_events( $data, $post, $request ) {
 
   $_data["ebData"] = json_decode($content);
 
-  if($_data["category"] == "Futures Event"){
+  if($_data["category"] == "Futures"){
     $_data["level"] = "1";
   }else{
     $_data["level"] = "0";
