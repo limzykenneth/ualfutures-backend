@@ -38,6 +38,42 @@ function custom_admin_styles() {
 // add_action('rest_api_init','add_cors_http_header');
 
 
+function additional_routes(){
+  register_rest_route( 'futures_categories', '/(?P<id>.+)', array(
+    'methods' => 'GET',
+    'callback' => 'futures_get_categories',
+    'args' => array(
+      'id' => array(
+        'validate_callback'  => function($param, $request, $key) {
+          // validate parameters
+          return true;
+        }
+      ),
+    ),
+  ));
+}
+
+
+function futures_get_categories(WP_REST_Request $request){
+  $param = urldecode($request['id']);
+  $param = $param . " Categories";
+
+  global $wpdb;
+  $statement = $wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_title = %s", $param);
+  $group_ID = $wpdb->get_var($statement);
+
+  $fields = array();
+  $fields = apply_filters('acf/field_group/get_fields', $fields, $group_ID);
+
+  $categories = $fields[0]["choices"];
+  if(!$categories){
+    $categories = null;
+  }
+  return $categories;
+}
+add_action("rest_api_init", "additional_routes");
+
+
 /*-----------------------------------------------------------------------------------*/
 /* Custom Return Data */
 /*-----------------------------------------------------------------------------------*/
