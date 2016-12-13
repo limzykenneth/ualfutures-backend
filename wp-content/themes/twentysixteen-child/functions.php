@@ -88,6 +88,8 @@ function ual_futures_prepare_post( $data, $post, $request ) {
     array_push($_data["tags"], $tag);
   }
 
+  $_data["level"] = 2;
+
   $_data["category"] = "Features";
 
 	return $_data;
