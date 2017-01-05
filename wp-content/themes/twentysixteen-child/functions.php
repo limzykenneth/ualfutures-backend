@@ -216,6 +216,21 @@ function ual_futures_prepare_slideshow( $data, $post, $request ) {
 
 add_filter( 'rest_prepare_slideshow', 'ual_futures_prepare_slideshow', 10, 3 );
 
+
+function ual_futures_prepare_about( $data, $post, $request ) {
+  $_data = $data->data;
+
+  unset($_data["guid"]);
+  unset($_data["link"]);
+  unset($_data["acf"]);
+  $_data["title"] = $_data["title"]["rendered"];
+  $_data["content"] = $_data["content"]["rendered"];
+
+  return $_data;
+}
+
+add_filter( 'rest_prepare_about', 'ual_futures_prepare_about', 10, 3 );
+
 // Ask browser to cache the return data
 add_filter( 'rest_cache_headers', function() {
     return array( 'Cache-Control' => 'private,max-age=172800' );
@@ -271,6 +286,18 @@ function create_post_type() {
       'labels' => array(
         'name' => __('Slideshow'),
         'singular_name' => __('Slideshow')
+      ),
+      'public' => true,
+      'has_archive' => true,
+      'show_in_rest' => true
+    )
+  );
+
+  register_post_type('about',
+    array(
+      'labels' => array(
+        'name' => __('About'),
+        'singular_name' => __('About')
       ),
       'public' => true,
       'has_archive' => true,
