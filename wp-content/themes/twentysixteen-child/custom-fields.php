@@ -392,12 +392,12 @@ function createSlidesFields($number_of_slides){
 							'status' => 1,
 							'rules' => array (
 								array (
-									'field' => 'field_' . ($fields_id - 3),
+									'field' => 'field_' . ($fields_id - 4),
 									'operator' => '==',
 									'value' => 'Text',
 								),
 								array (
-									'field' => 'field_' . ($fields_id - 3),
+									'field' => 'field_' . ($fields_id - 4),
 									'operator' => '==',
 									'value' => 'Image',
 								),
@@ -466,7 +466,38 @@ function createSlidesFields($number_of_slides){
 						);
 		$fields_id++;
 
-		array_push($result, $first_field, $second_field, $third_field);
+		$fourth_field = array(
+			'key' => 'field_' . $fields_id,
+			'label' => 'URL ' . $i,
+			'name' => 'url_' . $i,
+			'type' => 'text',
+			'required' => 0,
+			'conditional_logic' => array (
+				'status' => 1,
+				'rules' => array (
+					array (
+						'field' => 'field_' . ($fields_id - 3),
+						'operator' => '==',
+						'value' => 'Text',
+					),
+					array (
+						'field' => 'field_' . ($fields_id - 3),
+						'operator' => '==',
+						'value' => 'Image',
+					),
+				),
+				'allorany' => 'any',
+			),
+			'default_value' => '',
+			'placeholder' => 'http://duckduckgo.com',
+			'prepend' => '',
+			'append' => '',
+			'formatting' => 'none',
+			'maxlength' => '',
+		);
+		$fields_id++;
+
+		array_push($result, $first_field, $second_field, $third_field, $fourth_field);
 	}
 
 	return $result;
