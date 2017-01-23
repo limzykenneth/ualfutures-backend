@@ -232,9 +232,9 @@ function ual_futures_prepare_about( $data, $post, $request ) {
 add_filter( 'rest_prepare_about', 'ual_futures_prepare_about', 10, 3 );
 
 // Ask browser to cache the return data
-add_filter( 'rest_cache_headers', function() {
-    return array( 'Cache-Control' => 'private,max-age=172800' );
-});
+// add_filter( 'rest_cache_headers', function() {
+//     return array( 'Cache-Control' => 'private,max-age=172800' );
+// });
 
 
 /*-----------------------------------------------------------------------------------*/
