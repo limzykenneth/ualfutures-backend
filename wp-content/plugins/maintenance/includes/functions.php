@@ -42,9 +42,9 @@
 			$out_filed .= '</td>';
 		$out_filed .= '</tr>';			
 		echo $out_filed;
-	}	
+	}
 
-	function generate_number_filed($title, $id, $name, $value, $placeholder = '') {
+function generate_number_filed($title, $id, $name, $value, $placeholder = '') {
 		$out_filed = '';
 		$out_filed .= '<tr valign="top">';
 		$out_filed .= '<th scope="row">' . esc_attr($title) .'</th>';
@@ -68,8 +68,26 @@
 			$out_filed .= '</td>';
 		$out_filed .= '</tr>';			
 		echo $out_filed;
-	}	
-	
+	}
+
+
+	function generate_tinymce_filed($title, $id, $name, $value) {
+		$out_filed = '';
+		$out_filed .= '<tr valign="top">';
+		$out_filed .= '<th scope="row">' . esc_attr($title) .'</th>';
+		$out_filed .= '<td>';
+		$out_filed .= '<filedset>';
+		ob_start();
+		wp_editor($value, $id, array('textarea_name' => 'lib_options['.$name.']', 'teeny'=>1, 'media_buttons'=>0) );
+		$out_filed .= ob_get_contents();
+		ob_clean();
+		$out_filed .= '</filedset>';
+		$out_filed .= '</td>';
+		$out_filed .= '</tr>';
+		echo $out_filed;
+	}
+
+
 	function generate_check_filed($title, $label, $id, $name, $value) {
 		$out_filed = '';
 		$out_filed .= '<tr valign="top">';
@@ -223,32 +241,32 @@
 		add_meta_box( 'maintenance-css', 	 __( 'Custom CSS', 'maintenance' ),        'add_css_fields', $maintenance_variable->options_page, 'normal', 'default');
 		add_meta_box( 'maintenance-excludepages', 	 __( 'Exclude pages from maintenance mode', 'maintenance' ), 'add_exclude_pages_fields', $maintenance_variable->options_page, 'normal', 'default');
 	}
-	add_action('add_meta_boxes', 'maintenance_page_create_meta_boxes', 10);
+	add_action('add_mt_meta_boxes', 'maintenance_page_create_meta_boxes', 10);
 	
 	function maintenance_page_create_meta_boxes_widget_pro() {
 		global $maintenance_variable;
 		add_meta_box( 'promo-extended',   	 __( 'Pro version', 'maintenance' ),  'maintenanace_extended_version',  $maintenance_variable->options_page, 'side',   'default' );
 	}
-	add_action('add_meta_boxes', 'maintenance_page_create_meta_boxes_widget_pro', 11);
+	add_action('add_mt_meta_boxes', 'maintenance_page_create_meta_boxes_widget_pro', 11);
 	
 
 	function maintenance_page_create_meta_boxes_our_themes() {
 		global $maintenance_variable;
 		add_meta_box( 'promo-our-themes',   	 __( 'Fruitful Code projects',  'maintenance' ),  'maintenanace_our_themes',   $maintenance_variable->options_page, 'side',   'default' );
 	}	
-	add_action('add_meta_boxes', 'maintenance_page_create_meta_boxes_our_themes', 12);	
+	add_action('add_mt_meta_boxes', 'maintenance_page_create_meta_boxes_our_themes', 12);	
 	
 	function maintenance_page_create_meta_boxes_widget_support() {
 		global $maintenance_variable;
 		add_meta_box( 'promo-content',   	 __( 'Support',  'maintenance' ),  'maintenanace_contact_support',   $maintenance_variable->options_page, 'side',   'default' );
 	}	
-	add_action('add_meta_boxes', 'maintenance_page_create_meta_boxes_widget_support', 13);	
+	add_action('add_mt_meta_boxes', 'maintenance_page_create_meta_boxes_widget_support', 13);	
 	
 	function maintenance_page_create_meta_boxes_improve_translate() {
 		global $maintenance_variable;
 		add_meta_box( 'promo-translate',   	 __( 'Translation',  'maintenance' ),  'maintenanace_improve_translate',   $maintenance_variable->options_page, 'side',   'default' );
 	}	
-	add_action('add_meta_boxes', 'maintenance_page_create_meta_boxes_improve_translate', 14);		
+	add_action('add_mt_meta_boxes', 'maintenance_page_create_meta_boxes_improve_translate', 14);		
 	
 	function add_data_fields ($object, $box) {
 		$mt_option = mt_get_plugin_options(true);
@@ -257,13 +275,13 @@
 		/*Deafult Variable*/
 		$page_title = $heading = $description = $logo_width = $logo_height = '';
 		
-		
-		if (isset($mt_option['page_title'])) $page_title = wp_kses_post($mt_option['page_title']);
-		if (isset($mt_option['heading']))  $heading = wp_kses_post($mt_option['heading']);
-		if (isset($mt_option['description'])) $description = wp_kses_post($mt_option['description']);
-		if (isset($mt_option['footer_text'])) $footer_text = wp_kses_post($mt_option['footer_text']);
-		if (isset($mt_option['logo_width'])) $logo_width = wp_kses_post($mt_option['logo_width']);
-		if (isset($mt_option['logo_height'])) $logo_height = wp_kses_post($mt_option['logo_height']);
+		$allowed_tags = wp_kses_allowed_html( 'post' );
+		if (isset($mt_option['page_title']))  $page_title 	= wp_kses_post($mt_option['page_title']);
+		if (isset($mt_option['heading']))     $heading 		= wp_kses_post($mt_option['heading']);
+		if (isset($mt_option['description'])) $description 	= wp_kses(stripslashes($mt_option['description']), $allowed_tags) ;
+		if (isset($mt_option['footer_text'])) $footer_text 	= wp_kses_post($mt_option['footer_text']);
+		if (isset($mt_option['logo_width']))  $logo_width 	= wp_kses_post($mt_option['logo_width']);
+		if (isset($mt_option['logo_height'])) $logo_height 	= wp_kses_post($mt_option['logo_height']);
 		
 		?>
 		<table class="form-table">
@@ -271,7 +289,7 @@
 		<?php	
 				generate_input_filed(__('Page title', 'maintenance'), 'page_title', 'page_title', $page_title);
 				generate_input_filed(__('Headline', 'maintenance'),	'heading', 'heading', $heading);
-				generate_textarea_filed(__('Description', 'maintenance'), 'description', 'description', $description);
+				generate_tinymce_filed(__('Description', 'maintenance'), 'description', 'description', $description);
 				generate_input_filed(__('Footer Text', 'maintenance'),	'footer_text', 'footer_text', 	$footer_text);
 				generate_number_filed(__('Set Logo width', 'maintenance'), 'logo_width', 'logo_width', $logo_width);
 				generate_number_filed(__('Set Logo height', 'maintenance'), 'logo_height', 'logo_height', $logo_height);
@@ -327,52 +345,55 @@
 						
 			foreach ($post_types as $post_slug => $type) {
 					
-					if (($post_slug == 'attachment') || 
-						($post_slug == 'revision') || 
-						($post_slug == 'nav_menu_item')
-						) continue;
+				if (($post_slug == 'attachment') || 
+					($post_slug == 'revision') || 
+					($post_slug == 'nav_menu_item')
+					) continue;
+				
+				
+				$args = array();
+				$args = array(
+					'posts_per_page'   => -1,
+					'orderby'          => 'NAME',
+					'order'            => 'ASC',
+					'post_type'        => $post_slug,
+					'post_status'      => 'publish'); 
+
+				$posts_array = get_posts( $args );
+				$db_pages_ex = array();					
+				
+				if (!empty($posts_array)) {
+					
+					/*Exclude pages from maintenance mode*/
+					if (!empty($mt_option['exclude_pages']) && isset($mt_option['exclude_pages'][$post_slug])) { 
+						$db_pages_ex = $mt_option['exclude_pages'][$post_slug]; 
+					}
 					
 					$out_filed .= '<tr valign="top">';	
 						$out_filed .= '<th scope="row">' . $type->labels->name .'</th>';
-						
+					
 						$out_filed .= '<filedset>';	
 						$out_filed .= '<td>';	
+					
+						$out_filed .= '<select id="exclude-pages" name="lib_options[exclude_pages]['.$post_slug.'][]" style="width:100%;" class="exclude-pages multiple-select-mt" multiple="multiple">';
 						
-						$args = array();
-						$args = array(
-									'posts_per_page'   => -1,
-									'orderby'          => 'NAME',
-									'order'            => 'ASC',
-									'post_type'        => $post_slug,
-									'post_status'      => 'publish'); 
-	
-						$posts_array = get_posts( $args );
-						$db_pages_ex = array();
-						
-						/*Exclude pages from maintenance mode*/
-						if (!empty($mt_option['exclude_pages']) && isset($mt_option['exclude_pages'][$post_slug])) { $db_pages_ex = $mt_option['exclude_pages'][$post_slug]; }
-						
-						if (!empty($posts_array)) {
-							$out_filed .= '<select id="exclude-pages" name="lib_options[exclude_pages]['.$post_slug.'][]" style="width:100%;" class="exclude-pages multiple-select-mt" multiple="multiple">';
-							
-							foreach ($posts_array as $post_values) {
-								$current = '';
-								if (!empty($db_pages_ex)) {
-									if (in_array($post_values->ID, $db_pages_ex)) {
-										$current = $post_values->ID;
-									}
-								}	
-								$selected = selected($current, $post_values->ID, false);
-								$out_filed .= '<option value="'.$post_values->ID.'" '.$selected .'>'.$post_values->post_title.'</option>';
-							}
-							
-							$out_filed .= '</select>';	
-						} else {
-							$out_filed .= '<h3>'.__('Not available object.', 'maintenance').'</h3>';
+						foreach ($posts_array as $post_values) {
+							$current = null;
+							if (!empty($db_pages_ex)) {
+								if (in_array($post_values->ID, $db_pages_ex)) {
+									$current = $post_values->ID;
+								}
+							}	
+							$selected = selected($current, $post_values->ID, false);
+							$out_filed .= '<option value="'.$post_values->ID.'" '.$selected .'>'.$post_values->post_title.'</option>';
 						}
-					$out_filed .= '</filedset>';	
-				$out_filed .= '</td>';	
-			$out_filed .= '</tr>';						
+						
+						$out_filed .= '</select>';	
+				
+						$out_filed .= '</filedset>';	
+						$out_filed .= '</td>';	
+					$out_filed .= '</tr>';						
+				}
 		}
 		
 			$out_filed .= '</tbody>';
