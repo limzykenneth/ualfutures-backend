@@ -154,7 +154,7 @@ add_filter( 'rest_prepare_opportunities', 'ual_futures_prepare_opportunities', 1
 function ual_futures_prepare_directories( $data, $post, $request ) {
   $_data = general_prepare_posts($data, $post->ID, $request);
   $_data["level"] = "0";
-  $_data["appData"] = "directories";
+  $_data["appData"] = "directory";
 
   return $_data;
 }
