@@ -31,11 +31,13 @@ function custom_admin_styles() {
   </style>';
 }
 
-// Set CORS headers
-// function add_cors_http_header(){
-//     header("Access-Control-Allow-Origin: *");
-// }
-// add_action('rest_api_init','add_cors_http_header');
+// Set headers
+function add_http_headers(){
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET');
+    header('Cache-Control: no-cache, no-store, must-revalidate');
+}
+add_action('rest_api_init','add_http_headers');
 
 
 function additional_routes(){
