@@ -216,22 +216,22 @@ if(function_exists("register_field_group"))
 		'id' => 'acf_level',
 		'title' => 'Features',
 		'fields' => array (
-			array (
-				'key' => 'field_5814a5e1c9831',
-				'label' => 'Post feature level',
-				'name' => 'level',
-				'type' => 'select',
-				'required' => 1,
-				'instructions' => 'The higher the number, the bigger it is on the menu.',
-				'choices' => array (
-					0 => 0,
-					1 => 1,
-					2 => 2,
-				),
-				'default_value' => 0,
-				'allow_null' => 0,
-				'multiple' => 0,
-			),
+			// array (
+			// 	'key' => 'field_5814a5e1c9831',
+			// 	'label' => 'Post feature level',
+			// 	'name' => 'level',
+			// 	'type' => 'select',
+			// 	'required' => 1,
+			// 	'instructions' => 'The higher the number, the bigger it is on the menu.',
+			// 	'choices' => array (
+			// 		0 => 0,
+			// 		1 => 1,
+			// 		2 => 2,
+			// 	),
+			// 	'default_value' => 0,
+			// 	'allow_null' => 0,
+			// 	'multiple' => 0,
+			// ),
 		),
 		'location' => array (
 			array (
