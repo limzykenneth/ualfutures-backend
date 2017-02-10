@@ -270,11 +270,11 @@ if(function_exists("register_field_group"))
 			),
 			array (
 				'key' => 'field_5814a64ac9830',
-				'label' => 'Authors',
+				'label' => 'Authors or credits',
 				'name' => 'created_by',
 				'type' => 'text',
 				'default_value' => '',
-				'placeholder' => 'Written by ...',
+				'placeholder' => 'Written by or taken from ...',
 				'prepend' => '',
 				'append' => '',
 				'formatting' => 'html',
